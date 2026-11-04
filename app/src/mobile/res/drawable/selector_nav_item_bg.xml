@@ -2,12 +2,12 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true">
         <inset
-            android:insetBottom="2dp"
-            android:insetLeft="2dp"
-            android:insetRight="2dp"
-            android:insetTop="2dp">
+            android:insetBottom="0dp"
+            android:insetLeft="20dp"
+            android:insetRight="20dp"
+            android:insetTop="14dp">
             <shape android:shape="rectangle">
-                <corners android:radius="24dp" />
+                <corners android:radius="21dp" />
                 <solid android:color="#33FFFFFF" />
             </shape>
         </inset>
