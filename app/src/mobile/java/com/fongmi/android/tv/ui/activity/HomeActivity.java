@@ -38,7 +38,6 @@ import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.custom.FragmentStateManager;
 import com.fongmi.android.tv.ui.fragment.ServiceFragment;
-import com.fongmi.android.tv.ui.fragment.SettingEnhanceFragment;
 import com.fongmi.android.tv.ui.fragment.SettingDanmakuFragment;
 import com.fongmi.android.tv.ui.fragment.SettingFragment;
 import com.fongmi.android.tv.ui.fragment.SettingPlayerFragment;
@@ -139,7 +138,6 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
             case 0 -> VodFragment.newInstance();
             case 1 -> SettingFragment.newInstance();
             case 2 -> SettingPlayerFragment.newInstance();
-            case 3 -> SettingEnhanceFragment.newInstance();
             case 4 -> SettingDanmakuFragment.newInstance();
             case 5 -> ServiceFragment.newInstance();
             default -> null;
@@ -414,7 +412,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
             return;
         } else if (!mBinding.navigation.getMenu().findItem(R.id.vod).isVisible()) {
             setNavigation();
-        } else if (mManager.isVisible(2) || mManager.isVisible(3) || mManager.isVisible(4)) {
+        } else if (mManager.isVisible(2) || mManager.isVisible(4)) {
             change(1);
         } else if (mManager.isVisible(5)) {
             change(0);
