@@ -4,7 +4,7 @@
     <item
         android:id="@+id/vod"
         android:icon="@drawable/ic_nav_vod"
-        android:title="@string/nav_vod"
+        android:title="@string/nav_home"
         android:visible="false" />
 
     <item
@@ -14,9 +14,15 @@
         android:visible="false" />
 
     <item
+        android:id="@+id/service"
+        android:icon="@drawable/ic_nav_service"
+        android:title="@string/nav_service"
+        android:visible="false" />
+
+    <item
         android:id="@+id/setting"
         android:icon="@drawable/ic_nav_setting"
-        android:title="@string/nav_setting"
+        android:title="@string/nav_profile"
         android:visible="false" />
 
 </menu>
