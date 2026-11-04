@@ -37,7 +37,6 @@ import com.fongmi.android.tv.service.PlaybackService;
 import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.custom.FragmentStateManager;
-import com.fongmi.android.tv.ui.fragment.BlankFragment;
 import com.fongmi.android.tv.ui.fragment.SettingEnhanceFragment;
 import com.fongmi.android.tv.ui.fragment.SettingDanmakuFragment;
 import com.fongmi.android.tv.ui.fragment.SettingFragment;
@@ -145,7 +144,6 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
             case 2 -> SettingPlayerFragment.newInstance();
             case 3 -> SettingEnhanceFragment.newInstance();
             case 4 -> SettingDanmakuFragment.newInstance();
-            case 5 -> BlankFragment.newInstance();
             default -> null;
         });
         if (savedInstanceState == null) change(0);
@@ -194,7 +192,6 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
         mBinding.navigation.getMenu().findItem(R.id.vod).setVisible(true);
         mBinding.navigation.getMenu().findItem(R.id.setting).setVisible(true);
         mBinding.navigation.getMenu().findItem(R.id.live).setVisible(LiveConfig.hasUrl());
-        mBinding.navigation.getMenu().findItem(R.id.service).setVisible(true);
         syncNavigationSelection();
     }
 
@@ -263,24 +260,17 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
         if (item.getItemId() == R.id.setting) return changeFragment(1);
         if (item.getItemId() == R.id.vod) return changeFragment(0);
         if (item.getItemId() == R.id.live) return openLive();
-        if (item.getItemId() == R.id.service) return changeFragment(5);
         return false;
     }
 
-    private int navigationId(int position) {
-        if (position == 1) return R.id.setting;
-        if (position == 5) return R.id.service;
-        return R.id.vod;
-    }
-
     private void selectNavigation(int position) {
-        int itemId = navigationId(position);
+        int itemId = position == 0 ? R.id.vod : R.id.setting;
         if (mBinding.navigation.getSelectedItemId() == itemId) changeFragment(position);
         else mBinding.navigation.setSelectedItemId(itemId);
     }
 
     private void syncNavigationSelection() {
-        int itemId = navigationId(currentPosition);
+        int itemId = currentPosition == 0 ? R.id.vod : R.id.setting;
         if (mBinding.navigation.getSelectedItemId() == itemId) return;
         mBinding.navigation.setOnItemSelectedListener(null);
         mBinding.navigation.setSelectedItemId(itemId);
@@ -431,8 +421,6 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
             change(0);
         } else if (mManager.isVisible(2) || mManager.isVisible(3) || mManager.isVisible(4)) {
             change(1);
-        } else if (mManager.isVisible(5)) {
-            change(0);
         } else if (mManager.isVisible(1)) {
             change(0);
         } else if (mManager.canBack(0)) {
