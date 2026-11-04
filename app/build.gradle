@@ -91,6 +91,14 @@ android {
     // ASS rendering is part of normal builds; package the matching prebuilt ABI.
     sourceSets.main.jniLibs.srcDir(rootProject.file('third_party/exo-ass-native/prebuilt'))
 
+    // Compress packaged native libraries so the sideload APK stays small; they are
+    // extracted at install time, and MPV bundles are already copied from assets.
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
     signingConfigs {
         release {
             if (hasReleaseSigning) {
