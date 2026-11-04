@@ -8,6 +8,9 @@
     <string name="nav_vod">點播</string>
     <string name="nav_live">直播</string>
     <string name="nav_setting">設定</string>
+    <string name="nav_home">首頁</string>
+    <string name="nav_service">服務</string>
+    <string name="nav_profile">我的</string>
 
     <!-- Menu -->
     <string name="menu_sync">同步</string>
