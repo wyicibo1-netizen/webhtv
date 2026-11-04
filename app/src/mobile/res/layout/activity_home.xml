@@ -21,7 +21,7 @@
         app:itemBackground="@drawable/selector_nav_item_bg"
         app:itemIconTint="@color/selector_nav"
         app:itemPaddingBottom="0dp"
-        app:itemPaddingTop="4dp"
+        app:itemPaddingTop="7dp"
         app:itemTextColor="@color/selector_nav"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_nav_home" />
