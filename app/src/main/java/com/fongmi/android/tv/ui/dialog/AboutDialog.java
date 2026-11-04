@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentActivity;
 import com.fongmi.android.tv.BuildConfig;
 import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.databinding.DialogAboutBinding;
-import com.fongmi.android.tv.utils.AppVersion;
 import com.fongmi.android.tv.utils.ResUtil;
 
 public final class AboutDialog {
@@ -24,19 +23,12 @@ public final class AboutDialog {
 
     public static void show(FragmentActivity activity, Runnable updateAction) {
         DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(activity));
-        binding.version.setText(activity.getString(R.string.about_version, AppVersion.fullName(), BuildConfig.FLAVOR_mode, BuildConfig.FLAVOR_abi));
+        binding.version.setText(activity.getString(R.string.about_version, "0.0.1", BuildConfig.FLAVOR_mode, BuildConfig.FLAVOR_abi));
         configureContentHeight(activity, binding);
 
         Dialog dialog = LightDialog.create(activity, null, binding.getRoot());
         binding.confirm.setOnClickListener(v -> dialog.dismiss());
-        binding.updateSettings.setOnClickListener(v -> {
-            dialog.dismiss();
-            UpdateSettingsDialog.show(activity);
-        });
-        binding.checkUpdate.setOnClickListener(v -> {
-            dialog.dismiss();
-            if (updateAction != null) updateAction.run();
-        });
+        binding.checkUpdate.setOnClickListener(v -> LightDialog.create(activity, "q11230026", null, activity.getString(android.R.string.ok), null, null, null).show());
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         configureWindow(activity, dialog);
