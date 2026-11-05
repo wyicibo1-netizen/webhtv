@@ -45,7 +45,6 @@ import com.fongmi.android.tv.ui.adapter.TypeAdapter;
 import com.fongmi.android.tv.ui.base.BaseFragment;
 import com.fongmi.android.tv.ui.dialog.FilterDialog;
 import com.fongmi.android.tv.ui.dialog.HistoryDialog;
-import com.fongmi.android.tv.ui.dialog.LinkDialog;
 import com.fongmi.android.tv.ui.dialog.OneKeySyncDialog;
 import com.fongmi.android.tv.ui.dialog.ReceiveDialog;
 import com.fongmi.android.tv.ui.dialog.SiteDialog;
@@ -116,13 +115,11 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     protected void initEvent() {
         mBinding.top.setOnClickListener(this::onTop);
         mBinding.logo.setOnClickListener(this::onLogo);
-        mBinding.link.setOnClickListener(this::onLink);
         mBinding.title.setOnClickListener(this::onSite);
         mBinding.title.setOnLongClickListener(this::reloadConfig);
         mBinding.typeMore.setOnTouchListener(this::onTypeMoreTouch);
         mBinding.typeMore.setOnClickListener(this::onTypeMore);
         mBinding.filter.setOnClickListener(this::onFilter);
-        mBinding.filter.setOnLongClickListener(this::onLink);
         mBinding.toolbar.setOnMenuItemClickListener(this::onMenuItemClick);
         mBinding.toolbar.post(this::setSearchLongClick);
         mBinding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
@@ -185,22 +182,18 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     private void setFabVisible(int position) {
         if (isNativeChromeHidden()) {
             mBinding.top.setVisibility(View.GONE);
-            mBinding.link.setVisibility(View.GONE);
             mBinding.filter.setVisibility(View.GONE);
             return;
         }
         if (mAdapter.getItemCount() == 0) {
             mBinding.top.setVisibility(View.INVISIBLE);
-            mBinding.link.setVisibility(View.VISIBLE);
             mBinding.filter.setVisibility(View.GONE);
         } else if (!mAdapter.get(position).getFilters().isEmpty()) {
             mBinding.top.setVisibility(View.INVISIBLE);
-            mBinding.link.setVisibility(View.GONE);
             mBinding.filter.show();
         } else if (position == 0 || mAdapter.get(position).getFilters().isEmpty()) {
             mBinding.top.setVisibility(View.INVISIBLE);
             mBinding.filter.setVisibility(View.GONE);
-            mBinding.link.show();
         }
     }
 
@@ -214,12 +207,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         getFragment().scrollToTop();
         mBinding.top.setVisibility(View.INVISIBLE);
         if (mBinding.filter.getVisibility() == View.INVISIBLE) mBinding.filter.show();
-        else if (mBinding.link.getVisibility() == View.INVISIBLE) mBinding.link.show();
-    }
-
-    private boolean onLink(View view) {
-        LinkDialog.show(this);
-        return true;
     }
 
     private void onTypeMore(View view) {
@@ -577,7 +564,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         mBinding.typeMore.setVisibility(View.GONE);
         mBinding.pager.setVisibility(View.GONE);
         mBinding.filter.setVisibility(View.GONE);
-        mBinding.link.setVisibility(View.GONE);
         mBinding.top.setVisibility(View.GONE);
         updateToolbarMenu();
     }
@@ -603,7 +589,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
             mBinding.typeMore.setVisibility(View.GONE);
             mBinding.pager.setVisibility(View.GONE);
             mBinding.filter.setVisibility(View.GONE);
-            mBinding.link.setVisibility(View.GONE);
             mBinding.top.setVisibility(View.GONE);
         }
     }
