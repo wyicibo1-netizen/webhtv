@@ -7,8 +7,7 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/navigation" />
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/navigation"
@@ -33,8 +32,8 @@
             android:paddingEnd="14dp">
 
             <FrameLayout
-                android:layout_width="40dp"
-                android:layout_height="24dp">
+                android:layout_width="44dp"
+                android:layout_height="32dp">
 
                 <View
                     android:id="@+id/vodPill"
@@ -44,8 +43,8 @@
                     android:visibility="invisible" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_nav_home"
                     app:tint="@color/selector_nav_tab" />
@@ -63,8 +62,8 @@
             android:paddingEnd="14dp">
 
             <FrameLayout
-                android:layout_width="40dp"
-                android:layout_height="24dp">
+                android:layout_width="44dp"
+                android:layout_height="32dp">
 
                 <View
                     android:id="@+id/livePill"
@@ -74,8 +73,8 @@
                     android:visibility="invisible" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_nav_live_tv"
                     app:tint="@color/selector_nav_tab" />
@@ -93,8 +92,8 @@
             android:paddingEnd="14dp">
 
             <FrameLayout
-                android:layout_width="40dp"
-                android:layout_height="24dp">
+                android:layout_width="44dp"
+                android:layout_height="32dp">
 
                 <View
                     android:id="@+id/servicePill"
@@ -104,8 +103,8 @@
                     android:visibility="invisible" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_nav_service"
                     app:tint="@color/selector_nav_tab" />
@@ -123,8 +122,8 @@
             android:paddingEnd="14dp">
 
             <FrameLayout
-                android:layout_width="40dp"
-                android:layout_height="24dp">
+                android:layout_width="44dp"
+                android:layout_height="32dp">
 
                 <View
                     android:id="@+id/settingPill"
@@ -134,8 +133,8 @@
                     android:visibility="invisible" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_nav_profile"
                     app:tint="@color/selector_nav_tab" />

@@ -189,10 +189,6 @@ final class WebHomeChromeController {
             params.height = height;
             binding.navigation.setLayoutParams(params);
         }
-        RelativeLayout.LayoutParams container = (RelativeLayout.LayoutParams) binding.container.getLayoutParams();
-        if (binding.navigation.getVisibility() == View.VISIBLE) container.addRule(RelativeLayout.ABOVE, binding.navigation.getId());
-        else container.removeRule(RelativeLayout.ABOVE);
-        binding.container.setLayoutParams(container);
     }
 
     private void dispatchViewport() {

@@ -223,15 +223,7 @@ public class HomeActivity extends BaseActivity implements WebHomeChromeControlle
     }
 
     public void setNavigationVisible(boolean visible) {
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mBinding.container.getLayoutParams();
-        if (visible) {
-            params.addRule(RelativeLayout.ABOVE, R.id.navigation);
-            mBinding.navigation.setVisibility(View.VISIBLE);
-        } else {
-            params.removeRule(RelativeLayout.ABOVE);
-            mBinding.navigation.setVisibility(View.GONE);
-        }
-        mBinding.container.setLayoutParams(params);
+        mBinding.navigation.setVisibility(visible ? View.VISIBLE : View.GONE);
         mBinding.getRoot().requestApplyInsets();
     }
 
