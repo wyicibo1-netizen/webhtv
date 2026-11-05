@@ -22,7 +22,6 @@ import com.fongmi.android.tv.ui.dialog.AppearanceDialog;
 import com.fongmi.android.tv.ui.dialog.ChoiceDialog;
 import com.fongmi.android.tv.ui.dialog.RestoreDialog;
 import com.fongmi.android.tv.ui.dialog.BackupProgressDialog;
-import com.fongmi.android.tv.utils.AppVersion;
 import com.fongmi.android.tv.utils.FileUtil;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.PermissionUtil;
@@ -65,7 +64,6 @@ public class SettingFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-        mBinding.versionText.setText(AppVersion.fullName());
         setOtherText();
         setCacheText();
     }
