@@ -113,7 +113,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
 
     @Override
     protected void initEvent() {
-        mBinding.top.setOnClickListener(this::onTop);
         mBinding.logo.setOnClickListener(this::onLogo);
         mBinding.title.setOnClickListener(this::onSite);
         mBinding.title.setOnLongClickListener(this::reloadConfig);
@@ -181,18 +180,14 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
 
     private void setFabVisible(int position) {
         if (isNativeChromeHidden()) {
-            mBinding.top.setVisibility(View.GONE);
             mBinding.filter.setVisibility(View.GONE);
             return;
         }
         if (mAdapter.getItemCount() == 0) {
-            mBinding.top.setVisibility(View.INVISIBLE);
             mBinding.filter.setVisibility(View.GONE);
         } else if (!mAdapter.get(position).getFilters().isEmpty()) {
-            mBinding.top.setVisibility(View.INVISIBLE);
             mBinding.filter.show();
         } else if (position == 0 || mAdapter.get(position).getFilters().isEmpty()) {
-            mBinding.top.setVisibility(View.INVISIBLE);
             mBinding.filter.setVisibility(View.GONE);
         }
     }
@@ -201,12 +196,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         List<String> items = Arrays.asList(getHome().getName(), getConfig().getName(), getString(R.string.app_name));
         Optional<String> optional = items.stream().filter(s -> !TextUtils.isEmpty(s)).findFirst();
         optional.ifPresent(s -> mBinding.title.setText(s));
-    }
-
-    private void onTop(View view) {
-        getFragment().scrollToTop();
-        mBinding.top.setVisibility(View.INVISIBLE);
-        if (mBinding.filter.getVisibility() == View.INVISIBLE) mBinding.filter.show();
     }
 
     private void onTypeMore(View view) {
@@ -564,7 +553,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         mBinding.typeMore.setVisibility(View.GONE);
         mBinding.pager.setVisibility(View.GONE);
         mBinding.filter.setVisibility(View.GONE);
-        mBinding.top.setVisibility(View.GONE);
         updateToolbarMenu();
     }
 
@@ -589,7 +577,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
             mBinding.typeMore.setVisibility(View.GONE);
             mBinding.pager.setVisibility(View.GONE);
             mBinding.filter.setVisibility(View.GONE);
-            mBinding.top.setVisibility(View.GONE);
         }
     }
 
