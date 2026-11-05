@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -51,13 +50,12 @@ import com.fongmi.android.tv.utils.Util;
 import com.fongmi.android.tv.web.WebHomeChromeStartup;
 import com.fongmi.android.tv.web.WebHomeViewport;
 import com.github.catvod.net.OkHttp;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.JsonObject;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class HomeActivity extends BaseActivity implements NavigationBarView.OnItemSelectedListener, WebHomeChromeController.Host {
+public class HomeActivity extends BaseActivity implements WebHomeChromeController.Host {
 
     public static final String EXTRA_NAV_POSITION = "nav_position";
     private static final String STATE_CURRENT_POSITION = "currentPosition";
@@ -68,6 +66,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     private Config mStartupConfig;
     private boolean wideWindow;
     private int currentPosition;
+    private int selectedTab = R.id.vod;
 
     @Override
     protected ViewBinding getBinding() {
@@ -93,7 +92,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
         mStartupConfig = Config.vod();
         mChrome = new WebHomeChromeController(this, mBinding, this, savedInstanceState, WebHomeChromeStartup.restore(mStartupConfig));
         mBinding.getRoot().addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> checkWindowShape(right - left, bottom - top));
-        mBinding.navigation.setOnItemSelectedListener(this);
+        bindNavigation();
         PermissionUtil.requestFile(this, allGranted -> PermissionUtil.requestNotify(this));
         initFragment(savedInstanceState);
         initConfig();
@@ -185,11 +184,24 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     }
 
     private void setNavigation() {
-        mBinding.navigation.getMenu().findItem(R.id.vod).setVisible(true);
-        mBinding.navigation.getMenu().findItem(R.id.setting).setVisible(true);
-        mBinding.navigation.getMenu().findItem(R.id.live).setVisible(LiveConfig.hasUrl());
-        mBinding.navigation.getMenu().findItem(R.id.service).setVisible(true);
+        setTabVisible(R.id.vod, true);
+        setTabVisible(R.id.setting, true);
+        setTabVisible(R.id.live, LiveConfig.hasUrl());
+        setTabVisible(R.id.service, true);
         syncNavigationSelection();
+    }
+
+    private void bindNavigation() {
+        for (int id : new int[]{R.id.vod, R.id.live, R.id.service, R.id.setting}) {
+            View item = mBinding.navigation.findViewById(id);
+            if (item != null) item.setOnClickListener(v -> onTabSelected(id));
+        }
+        applyTabSelection(selectedTab);
+    }
+
+    private void setTabVisible(int id, boolean visible) {
+        View item = mBinding.navigation.findViewById(id);
+        if (item != null) item.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     private boolean openLive() {
@@ -249,14 +261,26 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
         if (event.type() == ServerEvent.Type.SEARCH) SearchActivity.start(this, event.text());
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    private void onTabSelected(int itemId) {
         setNavigationVisible(true);
-        if (item.getItemId() == R.id.setting) return changeFragment(1);
-        if (item.getItemId() == R.id.vod) return changeFragment(0);
-        if (item.getItemId() == R.id.live) return openLive();
-        if (item.getItemId() == R.id.service) return changeFragment(5);
-        return false;
+        if (itemId == R.id.setting) changeFragment(1);
+        else if (itemId == R.id.vod) changeFragment(0);
+        else if (itemId == R.id.live) openLive();
+        else if (itemId == R.id.service) changeFragment(5);
+        applyTabSelection(itemId);
+    }
+
+    private void applyTabSelection(int itemId) {
+        selectedTab = itemId;
+        int[] items = {R.id.vod, R.id.live, R.id.service, R.id.setting};
+        int[] pills = {R.id.vodPill, R.id.livePill, R.id.servicePill, R.id.settingPill};
+        for (int i = 0; i < items.length; i++) {
+            View item = mBinding.navigation.findViewById(items[i]);
+            View pill = mBinding.navigation.findViewById(pills[i]);
+            boolean selected = items[i] == itemId;
+            if (item != null) item.setSelected(selected);
+            if (pill != null) pill.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
+        }
     }
 
     private int navigationId(int position) {
@@ -267,16 +291,14 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
 
     private void selectNavigation(int position) {
         int itemId = navigationId(position);
-        if (mBinding.navigation.getSelectedItemId() == itemId) changeFragment(position);
-        else mBinding.navigation.setSelectedItemId(itemId);
+        if (selectedTab == itemId) changeFragment(position);
+        else onTabSelected(itemId);
     }
 
     private void syncNavigationSelection() {
         int itemId = navigationId(currentPosition);
-        if (mBinding.navigation.getSelectedItemId() == itemId) return;
-        mBinding.navigation.setOnItemSelectedListener(null);
-        mBinding.navigation.setSelectedItemId(itemId);
-        mBinding.navigation.setOnItemSelectedListener(this);
+        if (selectedTab == itemId) return;
+        applyTabSelection(itemId);
     }
 
     private boolean changeFragment(int position) {
@@ -348,7 +370,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     public void openVod() {
         resetVodChrome();
         setNavigationVisible(true);
-        mBinding.navigation.setSelectedItemId(R.id.vod);
+        onTabSelected(R.id.vod);
         VodFragment fragment = (VodFragment) mManager.getFragment(0);
         if (fragment != null) fragment.openVodHome();
     }
@@ -410,7 +432,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     protected void onBackInvoked() {
         if (mChrome != null && mChrome.consumeBack()) {
             return;
-        } else if (!mBinding.navigation.getMenu().findItem(R.id.vod).isVisible()) {
+        } else if (mBinding.navigation.findViewById(R.id.vod).getVisibility() != View.VISIBLE) {
             setNavigation();
         } else if (mManager.isVisible(2) || mManager.isVisible(4)) {
             change(1);
