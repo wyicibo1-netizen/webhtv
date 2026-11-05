@@ -12,10 +12,11 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/transparent"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_nav_bar_bg"
         app:elevation="0dp"
         app:itemActiveIndicatorStyle="@null"
         app:itemBackground="@drawable/selector_nav_item_bg"
