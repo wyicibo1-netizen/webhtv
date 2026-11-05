@@ -18,7 +18,7 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/shape_nav_bar_bg"
         app:elevation="0dp"
-        app:itemActiveIndicatorStyle="@null"
+        app:itemActiveIndicatorStyle="@style/Widget.ShadowBox.NavIndicator"
         app:itemBackground="@drawable/selector_nav_item_bg"
         app:itemIconTint="@color/selector_nav"
         app:itemPaddingBottom="0dp"
