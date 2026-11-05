@@ -43,7 +43,6 @@ import com.fongmi.android.tv.ui.activity.KeepActivity;
 import com.fongmi.android.tv.ui.activity.SearchActivity;
 import com.fongmi.android.tv.ui.adapter.TypeAdapter;
 import com.fongmi.android.tv.ui.base.BaseFragment;
-import com.fongmi.android.tv.ui.dialog.FilterDialog;
 import com.fongmi.android.tv.ui.dialog.HistoryDialog;
 import com.fongmi.android.tv.ui.dialog.OneKeySyncDialog;
 import com.fongmi.android.tv.ui.dialog.ReceiveDialog;
@@ -118,7 +117,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         mBinding.title.setOnLongClickListener(this::reloadConfig);
         mBinding.typeMore.setOnTouchListener(this::onTypeMoreTouch);
         mBinding.typeMore.setOnClickListener(this::onTypeMore);
-        mBinding.filter.setOnClickListener(this::onFilter);
         mBinding.toolbar.setOnMenuItemClickListener(this::onMenuItemClick);
         mBinding.toolbar.post(this::setSearchLongClick);
         mBinding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
@@ -134,7 +132,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
             public void onPageSelected(int position) {
                 mBinding.type.smoothScrollToPosition(position);
                 mAdapter.setSelected(position);
-                setFabVisible(position);
             }
         });
     }
@@ -160,7 +157,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         if (mWeb != null && mWeb.isVisible()) return;
         mAdapter.addAll(mResult = result);
         notifyPagerAdapter();
-        setFabVisible(0);
         mBinding.typeMore.setVisibility(View.GONE);
         mBinding.type.post(this::updateTypeMoreVisible);
         updateToolbarMenu();
@@ -176,20 +172,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         int typeWidth = mBinding.typeBar.getWidth() - mBinding.typeBar.getPaddingStart() - mBinding.typeBar.getPaddingEnd();
         boolean visible = mAdapter.getItemCount() > 0 && mBinding.type.computeHorizontalScrollRange() > typeWidth;
         mBinding.typeMore.setVisibility(visible ? View.VISIBLE : View.GONE);
-    }
-
-    private void setFabVisible(int position) {
-        if (isNativeChromeHidden()) {
-            mBinding.filter.setVisibility(View.GONE);
-            return;
-        }
-        if (mAdapter.getItemCount() == 0) {
-            mBinding.filter.setVisibility(View.GONE);
-        } else if (!mAdapter.get(position).getFilters().isEmpty()) {
-            mBinding.filter.show();
-        } else if (position == 0 || mAdapter.get(position).getFilters().isEmpty()) {
-            mBinding.filter.setVisibility(View.GONE);
-        }
     }
 
     private void setTitle() {
@@ -244,10 +226,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
             }
         });
         return true;
-    }
-
-    private void onFilter(View view) {
-        if (mAdapter.getItemCount() > 0) FilterDialog.create().filter(mAdapter.get(mBinding.pager.getCurrentItem()).getFilters()).show(this);
     }
 
     private boolean onMenuItemClick(MenuItem item) {
@@ -313,7 +291,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         updateToolbarMenu();
         clearPagerTypes();
         mBinding.pager.setAdapter(new PageAdapter(getChildFragmentManager()));
-        setFabVisible(0);
         mViewModel.homeContent();
     }
 
@@ -552,7 +529,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         mBinding.type.setVisibility(View.GONE);
         mBinding.typeMore.setVisibility(View.GONE);
         mBinding.pager.setVisibility(View.GONE);
-        mBinding.filter.setVisibility(View.GONE);
         updateToolbarMenu();
     }
 
@@ -576,7 +552,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
             mBinding.type.setVisibility(View.GONE);
             mBinding.typeMore.setVisibility(View.GONE);
             mBinding.pager.setVisibility(View.GONE);
-            mBinding.filter.setVisibility(View.GONE);
         }
     }
 
