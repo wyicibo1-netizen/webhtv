@@ -3,10 +3,12 @@ package com.fongmi.android.tv.ui.activity;
 import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -65,8 +67,11 @@ public class HomeActivity extends BaseActivity implements WebHomeChromeControlle
     private WebHomeChromeController mChrome;
     private Config mStartupConfig;
     private boolean wideWindow;
+    private static final int[] TAB_COLORS = {0xFF4CAF50, 0xFF2196F3, 0xFF9C27B0, 0xFFFF9800, 0xFFF44336, 0xFF009688, 0xFFE91E63, 0xFFFFC107, 0xFF00BCD4, 0xFF3F51B5};
+
     private int currentPosition;
     private int selectedTab = R.id.vod;
+    private int colorIndex;
 
     @Override
     protected ViewBinding getBinding() {
@@ -194,9 +199,14 @@ public class HomeActivity extends BaseActivity implements WebHomeChromeControlle
     private void bindNavigation() {
         for (int id : new int[]{R.id.vod, R.id.live, R.id.service, R.id.setting}) {
             View item = mBinding.navigation.findViewById(id);
-            if (item != null) item.setOnClickListener(v -> onTabSelected(id));
+            if (item != null) item.setOnClickListener(v -> onTabClick(id));
         }
         applyTabSelection(selectedTab);
+    }
+
+    private void onTabClick(int itemId) {
+        colorIndex = (colorIndex + 1) % TAB_COLORS.length;
+        onTabSelected(itemId);
     }
 
     private void setTabVisible(int id, boolean visible) {
@@ -266,12 +276,16 @@ public class HomeActivity extends BaseActivity implements WebHomeChromeControlle
         selectedTab = itemId;
         int[] items = {R.id.vod, R.id.live, R.id.service, R.id.setting};
         int[] pills = {R.id.vodPill, R.id.livePill, R.id.servicePill, R.id.settingPill};
+        int[] icons = {R.id.vodIcon, R.id.liveIcon, R.id.serviceIcon, R.id.settingIcon};
+        int accent = TAB_COLORS[colorIndex];
         for (int i = 0; i < items.length; i++) {
             View item = mBinding.navigation.findViewById(items[i]);
             View pill = mBinding.navigation.findViewById(pills[i]);
+            View icon = mBinding.navigation.findViewById(icons[i]);
             boolean selected = items[i] == itemId;
             if (item != null) item.setSelected(selected);
             if (pill != null) pill.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
+            if (icon instanceof ImageView) ((ImageView) icon).setImageTintList(ColorStateList.valueOf(selected ? accent : 0xFFFFFFFF));
         }
     }
 
