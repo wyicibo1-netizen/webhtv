@@ -3,6 +3,7 @@ package com.fongmi.android.tv.ui.activity;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -17,6 +18,7 @@ import androidx.core.view.WindowInsetsControllerCompat;
 import com.fongmi.android.tv.bean.Site;
 import com.fongmi.android.tv.databinding.ActivityHomeBinding;
 import com.fongmi.android.tv.setting.Setting;
+import com.fongmi.android.tv.utils.ResUtil;
 import com.fongmi.android.tv.utils.Util;
 import com.fongmi.android.tv.web.WebHomeChrome;
 import com.fongmi.android.tv.web.WebHomeChromeOptions;
@@ -27,6 +29,7 @@ final class WebHomeChromeController {
 
     private static final String STATE_MODE = "webHomeChromeMode";
     private static final String STATE_PREVIOUS_MODE = "webHomeChromePreviousMode";
+    private static final int navigationBottomGapDp = 16;
 
     interface Host {
 
@@ -182,12 +185,29 @@ final class WebHomeChromeController {
         int top = normal ? current.getSafeTop() : 0;
         int bottom = normal ? current.getSafeBottom() : 0;
         binding.container.setPadding(0, top, 0, 0);
-        binding.navigation.setPadding(0, 0, 0, bottom);
         ViewGroup.LayoutParams params = binding.navigation.getLayoutParams();
-        int height = navigationBaseHeight + bottom;
-        if (params.height != height) {
+        if (!(params instanceof ViewGroup.MarginLayoutParams)) return;
+        ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) params;
+        int height = navigationBaseHeight;
+        int marginBottom = ResUtil.dp2px(navigationBottomGapDp) + contentBottomInset(bottom);
+        if (params.height != height || margins.bottomMargin != marginBottom) {
             params.height = height;
-            binding.navigation.setLayoutParams(params);
+            margins.bottomMargin = marginBottom;
+            binding.navigation.setLayoutParams(margins);
+        }
+    }
+
+    private int contentBottomInset(int systemBottom) {
+        if (systemBottom <= 0) return 0;
+        try {
+            DisplayMetrics metrics = new DisplayMetrics();
+            activity.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+            int decorHeight = binding.getRoot().getRootView().getHeight();
+            if (decorHeight <= 0) return systemBottom;
+            int uncovered = Math.max(0, metrics.heightPixels - decorHeight);
+            return Math.max(0, systemBottom - uncovered);
+        } catch (Throwable e) {
+            return systemBottom;
         }
     }
 
