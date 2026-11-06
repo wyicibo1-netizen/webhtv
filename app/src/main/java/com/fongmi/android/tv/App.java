@@ -29,6 +29,8 @@ import com.github.catvod.crawler.DebugLogStore;
 import com.github.catvod.crawler.SpiderDebug;
 import com.github.catvod.Init;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.Strictness;
 
 public class App extends Application implements Application.ActivityLifecycleCallbacks {
 
@@ -43,7 +45,7 @@ public class App extends Application implements Application.ActivityLifecycleCal
 
     public App() {
         instance = this;
-        gson = new Gson();
+        gson = new GsonBuilder().setStrictness(Strictness.LENIENT).create();
         time = System.currentTimeMillis();
         handler = HandlerCompat.createAsync(Looper.getMainLooper());
     }
